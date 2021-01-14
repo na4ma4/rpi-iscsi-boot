@@ -1,0 +1,49 @@
+env:
+  - CGO_ENABLED=0
+
+before:
+  hooks:
+    - make test
+    - go generate ./...
+    - go mod tidy
+    - go mod download
+
+builds:
+  - id: namegen
+    main: ./cmd/namegen
+    binary: namegen
+    targets:
+      - linux_amd64
+      - windows_amd64
+      - darwin_amd64
+
+archives:
+
+checksum:
+  algorithm: sha256
+  name_template: 'checksums.txt'
+
+snapshot:
+  name_template: "{{ .Tag }}-next"
+
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - '^docs:'
+      - '^test:'
+
+nfpms:
+  -
+    id: namegen
+    package_name: namegen
+    file_name_template: "namegen_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
+    builds:
+      - namegen
+    homepage: https://github.com/na4ma4/rpi-iscsi-boot
+    maintainer: na4ma4 <na4ma4@users.noreply.github.com>
+    description: Server name generator tool
+    formats:
+      - apk
+      - deb
+    bindir: /usr/bin

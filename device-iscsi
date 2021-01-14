@@ -1,0 +1,27 @@
+#!/bin/sh
+
+PREREQ=""
+
+prereqs()
+{
+	echo "$PREREQ"
+}
+
+case $1 in
+# get pre-requisites
+prereqs)
+	prereqs
+	exit 0
+	;;
+esac
+
+. /etc/iscsi.initramfs
+
+SERIAL_NUMBER="$(cat /sys/firmware/devicetree/base/serial-number)"
+MODEL="$(cat /sys/firmware/devicetree/base/model)"
+
+(
+echo "ISCSI_INITIATOR=iqn.1993-08.org.debian:01:${SERIAL_NUMBER}"
+echo "ISCSI_TARGET_NAME=iqn.2000-01.com.synology:corellia.${SERIAL_NUMBER}"
+echo "ISCSI_TARGET_IP=${ISCSI_TARGET_IP}"
+) > /etc/iscsi.initramfs
