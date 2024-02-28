@@ -1,6 +1,7 @@
 package namegen
 
 // List is a 16 element list of names for use with HexName.
+//
 //nolint:gochecknoglobals // Pregenerated list.
 var List = [16]string{
 	"bold",

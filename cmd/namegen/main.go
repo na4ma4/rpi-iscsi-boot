@@ -8,13 +8,11 @@ import (
 	"github.com/spf13/viper"
 )
 
-//nolint: gochecknoglobals // cobra uses globals in main
 var rootCmd = &cobra.Command{
 	Use: "namegen",
 	Run: mainCommand,
 }
 
-//nolint:gochecknoinits // init is used in main for cobra
 func init() {
 	rootCmd.PersistentFlags().BoolP("debug", "d", false, "Debug output")
 	_ = viper.BindPFlag("debug", rootCmd.PersistentFlags().Lookup("debug"))
@@ -27,7 +25,7 @@ func main() {
 
 const maxSerialLength = 8
 
-func mainCommand(cmd *cobra.Command, args []string) {
+func mainCommand(_ *cobra.Command, args []string) {
 	if len(args) > 0 {
 		name := args[0]
 		if len(name) > maxSerialLength {
